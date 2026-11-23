@@ -392,7 +392,6 @@ class PolymarketClobMarketStream:
         self.last_ts: float = 0
         self.closed = False
         self._ws = None
-        self._subscribed_ids = set()
 
     def update_assets(self, asset_ids: List[str]):
         new_ids = sorted(list(set(asset_ids)))
@@ -406,26 +405,18 @@ class PolymarketClobMarketStream:
                 if stale_id not in keep:
                     self.book_levels.pop(stale_id, None)
             if self._ws and not self._ws.closed and self.asset_ids:
-                asyncio.create_task(self._subscribe(self._ws, is_initial=False))
+                asyncio.create_task(self._subscribe(self._ws))
 
-    async def _subscribe(self, ws, is_initial: bool = True):
+    async def _subscribe(self, ws):
         if not self.asset_ids:
             return
+        sub_msg = {
+            "assets_ids": self.asset_ids,
+            "type": "market"
+        }
         try:
-            if is_initial or not self._subscribed_ids:
-                await ws.send_json({"assets_ids": self.asset_ids, "type": "market"})
-                self._subscribed_ids = set(self.asset_ids)
-                print(f"Subscribed to Polymarket CLOB Market WS for tokens: {self.asset_ids}")
-            else:
-                keep = set(self.asset_ids)
-                removed = [x for x in self._subscribed_ids if x not in keep]
-                added = [x for x in self.asset_ids if x not in self._subscribed_ids]
-                if removed:
-                    await ws.send_json({"assets_ids": removed, "operation": "unsubscribe"})
-                if added:
-                    await ws.send_json({"assets_ids": added, "operation": "subscribe"})
-                    print(f"Incrementally subscribed CLOB Market WS (+{len(added)}/-{len(removed)}): {added}")
-                self._subscribed_ids = keep
+            await ws.send_json(sub_msg)
+            print(f"Subscribed to Polymarket CLOB Market WS for tokens: {self.asset_ids}")
         except Exception as e:
             print(f"Failed to subscribe to CLOB market WS: {e}")
 

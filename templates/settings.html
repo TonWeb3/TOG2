@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Settings - Polymarket Assistant</title>
+    <title>Settings [TOG] - Polymarket Assistant</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
@@ -13,7 +13,10 @@
 <body class="bg-gray-900 text-white min-h-screen p-4 sm:p-8" x-data="settingsPage()" x-cloak>
     <div class="max-w-4xl mx-auto">
         <header class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 text-center sm:text-left">
-            <h1 class="text-2xl sm:text-3xl font-bold text-blue-400">Application Settings</h1>
+            <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <h1 class="text-2xl sm:text-3xl font-bold text-blue-400">Application Settings</h1>
+                <span class="bg-indigo-900/80 text-indigo-300 border border-indigo-500/50 px-2 sm:px-2.5 py-0.5 rounded font-mono text-xs font-black tracking-wider">TOG</span>
+            </div>
             <a href="/" class="w-full sm:w-auto bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded font-bold transition text-center">Back to Dashboard</a>
         </header>
 
